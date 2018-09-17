@@ -79,7 +79,7 @@ module.exports.getUserSurvey = function(req, res){
 
 //fetch all user list for admin to see in profile landing page
 module.exports.getUserList = function(req,res){
-  User.find({},['name','surveyId','score'],function(err,users){
+  User.find({surveyId: {$exists: true}},['name','surveyId','score'],function(err,users){
     if(err){
       console.log(err);
       res.status(500).json({

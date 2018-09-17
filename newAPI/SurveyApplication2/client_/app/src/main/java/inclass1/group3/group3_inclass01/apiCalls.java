@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.View;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -361,7 +363,6 @@ if (this.token == null)
         Request request = new Request.Builder()
                 .url(remoteIP+"/user/profile/postResponse")
                 .addHeader("Authorization","BEARER "+getToken())
-
                 .put(formBody)
                 .build();
 
@@ -396,10 +397,14 @@ if (this.token == null)
 
                 final ResponseApi result=  (ResponseApi) gson.fromJson(str, ResponseApi.class); // Fails to deserialize foo.value as Bar
 
-                if (!result.getMessage().isEmpty()) {
-                    //  Log.d(TAG, "onResponse: get messages "+result.messages.size());
-                    Toast.makeText(activity, result.getMessage(), Toast.LENGTH_SHORT).show();
-                    //  saveToken(result.token.toString(),result.getUserFullName(),result.getUser_id());
+                if (!result.status.equalsIgnoreCase("200")) {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Toast.makeText(activity, result.message.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
 
                 activity.runOnUiThread(new Runnable() {
@@ -416,7 +421,9 @@ if (this.token == null)
                             TextView Name,Age,Address,Weight;
 
                             Name= activity.findViewById(R.id.questionText);
-                          Name.setText("Thank You");
+                          Name.setText("Your response has been received. Thank You!");
+                            RadioGroup rg = activity.findViewById(R.id.radioGroup);
+                            rg.setVisibility(View.INVISIBLE);
                         }
                         //   Toast.makeText(activity, "token created successfully", Toast.LENGTH_SHORT).show();
                         //do something more.

@@ -65,11 +65,13 @@ function AppViewModel() {
     self.getUserDetailSurvey =function (params) {
         //ajax to bring the user survey
         $.ajax({
-            method: "GET",
+            method: "POST",
             contentType: 'application/json',
             headers: {"Authorization": "BEARER "+readCookie('token')},
-           
-                url: self.urlIP()+ "/user/profile/showUsers",
+            data: JSON.stringify({
+                _id: readCookie("uid"),
+               surveyId: readCookie("sid") }),
+                url: self.urlIP()+ "/user/profile/showsurvey",
                
                 success: function(result) {
                     //Write your code here
@@ -85,9 +87,10 @@ function row(index,value,sid)
     this.surveyId=sid;
 }
 var tableData=[];
+var answerArray = result.user[0].answers;
 //get data from result.user and generate the complete row wise data for each question and its respective answer from answer array
-$.each([ result.user.answers ], function( index, value ) {
-  tableData[index]= new row(index,value,result.user._id);
+$.each(answerArray, function( index, value ) {
+  tableData[index]= new row(index,value,result.user[0]._id);
   });
 self.showUserDetailTable(tableData);
                     
@@ -245,29 +248,31 @@ var data = [
 
 ko.applyBindings(new AppViewModel());
 
-function createCookie(name, value, days) {
-    var expires;
+ function createCookie(name, value, days) {
+     window.localStorage.setItem(name,value);
+//     var expires;
 
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = "; expires=" + date.toGMTString();
-    } else {
-        expires = "";
-    }
-    document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + expires + "; path=/";
+//     if (days) {
+//         var date = new Date();
+//         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+//         expires = "; expires=" + date.toGMTString();
+//     } else {
+//         expires = "";
+//     }
+//     document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + expires + "; path=/";
 }
 
 function readCookie(name) {
-    var nameEQ = encodeURIComponent(name) + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) === ' ')
-            c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) === 0)
-            return decodeURIComponent(c.substring(nameEQ.length, c.length));
-    }
+    // var nameEQ = encodeURIComponent(name) + "=";
+    // var ca = document.cookie.split(';');
+    // for (var i = 0; i < ca.length; i++) {
+    //     var c = ca[i];
+    //     while (c.charAt(0) === ' ')
+    //         c = c.substring(1, c.length);
+    //     if (c.indexOf(nameEQ) === 0)
+    //         return decodeURIComponent(c.substring(nameEQ.length, c.length));
+    // }
+    return window.localStorage.getItem(name);
     return null;
 }
 
