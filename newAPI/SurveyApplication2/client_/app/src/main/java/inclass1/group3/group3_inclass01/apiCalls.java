@@ -355,12 +355,8 @@ if (this.token == null)
         Log.d(TAG, "answers"+  (answers));
         final OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new FormBody.Builder()
-                .add("score","65")
-                .add("answers[0]", String.valueOf( answers[0]))
-                .add("answers[1]", String.valueOf( answers[1]))
-                .add("answers[2]", String.valueOf( answers[2]))
-                .add("answers[3]", String.valueOf( answers[3]))
-                .add("answers[4]", String.valueOf( answers[4]))
+                .add("score",String.valueOf(score))
+                .add("answers",  Arrays.toString(answers))
                 .build();
         Request request = new Request.Builder()
                 .url(remoteIP+"/user/profile/postResponse")

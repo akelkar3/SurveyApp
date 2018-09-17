@@ -110,7 +110,7 @@ module.exports.postSurveyResponse = function(req,res){
       $set:{
         surveyId:new mongoose.Types.ObjectId(),
        // role:req.body.role,
-        score:req.body.score,
+        score:JSON.parse(req.body.score),
         answers:JSON.parse(req.body.answers)
       }
     },
