@@ -3,12 +3,12 @@ const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
- var path = require('path');
+
 
 const userRoutes = require('./api/routes/user');
 //serve landing index.html page:
 app.get('/app',function(req,res){
-  res.sendFile(__dirname+'/WebApp/index.html');
+  res.sendFile(__dirname+'/index.html');
   //__dirname : It will resolve to your project folder.
 });
 
@@ -18,8 +18,8 @@ mongoose.connect('mongodb://localhost:27017/test');
 mongoose.Promise = global.Promise;
 
 app.use(morgan("dev"));
-app.use('/uploads', express.static('uploads'));
-app.use(express.static(path.join(__dirname, 'content')));
+app.use('/WebApp', express.static('WebApp'));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
