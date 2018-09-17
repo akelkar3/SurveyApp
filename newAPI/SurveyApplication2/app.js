@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 
 const userRoutes = require('./api/routes/user');
 //serve landing index.html page:
-app.get('/app',function(req,res){
+app.get('/index.html',function(req,res){
   res.sendFile(__dirname+'/WebApp/index.html');
   //__dirname : It will resolve to your project folder.
 });
