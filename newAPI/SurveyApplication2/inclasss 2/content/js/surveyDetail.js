@@ -77,8 +77,19 @@ function AppViewModel() {
                     //self.token(result.token);
                 //on success call 
 $('#userDetail').fadeIn(2000);
+function row(index,value,sid)
+{
+    this.question = Questions[index];
+    this.answer = options[0][value];
+    this.score=value;
+    this.surveyId=sid;
+}
+var tableData=[];
 //get data from result.user and generate the complete row wise data for each question and its respective answer from answer array
-self.showUserDetailTable(result.user);
+$.each([ result.user.answers ], function( index, value ) {
+  tableData[index]= new row(index,value,result.user._id);
+  });
+self.showUserDetailTable(tableData);
                     
                     }
                     else{
@@ -104,10 +115,10 @@ self.showUserDetailTable= function (tabledata) {
             data: tabledata,
             dom: 'Bfrtip',
             columns: [
-                { data: 'name', title:'Question' },
-                { data: 'position',title:'Answer' },
-                { data: 'salary',title:'Score' },
-                { data: 'office' ,title:'office'}
+                { data: 'question', title:'Question' },
+                { data: 'answer',title:'Answer' },
+                { data: 'score',title:'Score' }
+                
             ],
             buttons: [{
                 extend: 'pdf',
@@ -133,6 +144,84 @@ self.getUserDetailSurvey();
 
 
 //dummy data to be deleted later
+var Questions = [
+    "How often do you have a drink containing alcohol?",
+    "How many drinks containing alcohol do you have on a typical day when you are drinking?",
+    " How often do you have six or more drinks on one occasion?",
+    " How often during the last year have you found that you were not able to stop drinking once you had started?"
+    ,"How often during the last year have you failed to do what was normally expected from you because of drinking?"
+    ," How often during the last year have you needed a first drink in the morning to get yourself going after a heavy drinking session?"
+    ," How often during the last year have you had a feeling of guilt or remorse after drinking?"
+    ," How often during the last year have you been unable to remember what happened the night before because you had been drinking?"
+    ,"Have you or someone else been injured as a result of your drinking?"
+    ,"Has a relative or friend or a doctor or another health worker been concerned about your drinking or suggested you cut down?"
+]
+var options = [
+    [ "Never"
+    ,"Monthly or less"
+    ,"2 to 4 times a month"
+    ,"2 to 3 times a week"
+    ," 4 or more times a week" 
+    ]
+    ,[  "1 or 2"
+        ,"3 or 4"
+        ,"5 or 6"
+        ," 7, 8, or 9"
+        ," 10 or more"
+    ]
+    ,[ "Never"
+        ," Less than monthly"
+       ,"Monthly"
+        ," Weekly"
+       ," Daily or almost daily"
+
+    ]
+    ,[ "Never"
+        ," Less than monthly"
+       ,"Monthly"
+        ," Weekly"
+       ," Daily or almost daily"
+
+    ]
+    ,[ "Never"
+        ," Less than monthly"
+       ,"Monthly"
+        ," Weekly"
+       ," Daily or almost daily"
+
+    ]
+    ,[ "Never"
+    ," Less than monthly"
+   ,"Monthly"
+    ," Weekly"
+   ," Daily or almost daily"
+    ]
+    ,[ "Never"
+        ," Less than monthly"
+       ,"Monthly"
+        ," Weekly"
+       ," Daily or almost daily"
+
+    ]
+    ,[ "Never"
+        ," Less than monthly"
+       ,"Monthly"
+        ," Weekly"
+       ," Daily or almost daily"
+
+    ]
+    ,[ "No"
+,"","Yes, but not in the last year"
+,""," Yes, during the last year"
+
+]
+,[ "No"
+,"","Yes, but not in the last year"
+,""," Yes, during the last year"
+
+]
+];
+
 var data = [
     {
         "name":       "Tiger Nixon",

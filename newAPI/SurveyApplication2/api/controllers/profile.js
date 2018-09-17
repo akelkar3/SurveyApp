@@ -111,7 +111,7 @@ module.exports.postSurveyResponse = function(req,res){
         surveyId:new mongoose.Types.ObjectId(),
        // role:req.body.role,
         score:req.body.score,
-        answers:req.body.answers
+        answers:JSON.parse(req.body.answers)
       }
     },
     {new: true},

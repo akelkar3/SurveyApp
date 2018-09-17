@@ -43,8 +43,11 @@ function AppViewModel() {
                 
                 }
                 else{
-
+                    if(result.status==200 )
                     $.toast({heading:'error',text:'Invalid User only admin is allowed to use this portal.', icon: 'error'});
+                    else
+                    $.toast({heading:'error',text:result.responseJSON.message,icon:'error'});
+               
                 }
                 },
             error:

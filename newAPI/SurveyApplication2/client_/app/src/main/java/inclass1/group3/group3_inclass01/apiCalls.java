@@ -9,8 +9,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSerializer;
+
+import org.json.JSONArray;
+import org.json.JSONStringer;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -28,7 +33,7 @@ import okhttp3.ResponseBody;
 
 public class apiCalls {
   //  static public String remoteIP="54.157.56.47";
-    static public String remoteIP ="http://localhost:5000";
+    static public String remoteIP ="http://18.223.110.166:5000";
 static public Activity activity;
     final String TAG="test";
 static public String token;
@@ -138,6 +143,11 @@ if (this.token == null)
                             if (!result.status.equalsIgnoreCase("200")) {
                             Toast.makeText(activity, result.getMessage(), Toast.LENGTH_SHORT).show();
                         }else {
+                                if(result.role.equalsIgnoreCase("admin")){
+                                    Toast.makeText(activity, "Please login though web portal app is only for patients", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+
                             SharedPreferences sharedPref =  activity.getSharedPreferences(
                                     "mypref", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPref.edit();
@@ -342,14 +352,20 @@ if (this.token == null)
     }
 
     public void saveResponse(int[] answers,int score) {
+        Log.d(TAG, "answers"+  (answers));
         final OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new FormBody.Builder()
-                .add("score", String.valueOf(score))
-                .add("answers", answers.toString())
+                .add("score","65")
+                .add("answers[0]", String.valueOf( answers[0]))
+                .add("answers[1]", String.valueOf( answers[1]))
+                .add("answers[2]", String.valueOf( answers[2]))
+                .add("answers[3]", String.valueOf( answers[3]))
+                .add("answers[4]", String.valueOf( answers[4]))
                 .build();
         Request request = new Request.Builder()
                 .url(remoteIP+"/user/profile/postResponse")
                 .addHeader("Authorization","BEARER "+getToken())
+
                 .put(formBody)
                 .build();
 
@@ -363,7 +379,15 @@ if (this.token == null)
             public void onResponse(Call call, final Response response) throws IOException {
                 String str;
                 try (ResponseBody responseBody = response.body()) {
-                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    if (!response.isSuccessful()) {
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                Toast.makeText(activity, responseBody.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
 
                     Headers responseHeaders = response.headers();
 
