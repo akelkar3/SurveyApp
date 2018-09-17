@@ -119,8 +119,12 @@ self.showUserDetailTable= function (tabledata) {
             dom: 'Bfrtip',
             columns: [
                 { data: 'question', title:'Question' },
-                { data: 'answer',title:'Answer' },
-                { data: 'score',title:'Score' }
+                { data: 'answer',title:'Answer',render: function (data, type, row) {
+                    return data=="" || data == null?"skipped":data;
+                 } },
+                { data: 'score',title:'Score',render: function (data, type, row) {
+                   return data==100?0:data;
+                } }
                 
             ],
             buttons: [{
